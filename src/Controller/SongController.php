@@ -14,13 +14,23 @@ class SongController extends AbstractController
     public function index(Request $request, SongRepository $repository): Response
     {
         $songs = $repository->findAll();
-        dd($songs);
-        return new Response('Songs');
+        return $this->render(
+            'song/index.html.twig',
+            [
+                'songs' => $songs
+            ]
+        );
     }
 
     #[Route('/song/{slug}-{id}', name: 'song.show', requirements: ['id' => '\d+', 'slug' => '[a-z0-9-]+'])]
     public function show(Request $request, string $slug, int $id): Response
     {
-        return new Response('Song: ' . $slug);
+        return $this->render(
+            'song/show.html.twig',
+            [
+                'slug' => $slug,
+                'id' => $id
+            ]
+        );
     }
 }
