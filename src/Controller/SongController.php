@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\SongRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,13 +24,16 @@ class SongController extends AbstractController
     }
 
     #[Route('/song/{slug}-{id}', name: 'song.show', requirements: ['id' => '\d+', 'slug' => '[a-z0-9-]+'])]
-    public function show(Request $request, string $slug, int $id): Response
+    public function show(Request $request, string $slug, int $id, SongRepository $repository): Response
     {
+        $song = $repository->find($id);
+        if ($song->getSlug() !== $slug) {
+            return $this->redirectToRoute('song.show', ['slug' => $song->getSlug(), 'id' => $song->getId()]);
+        }
         return $this->render(
             'song/show.html.twig',
             [
-                'slug' => $slug,
-                'id' => $id
+                'song' => $song,
             ]
         );
     }

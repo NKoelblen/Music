@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title "Song : " ~ song.title %}
+
+{% block body %}
+    <h1>{{ song.title }}</h1>
+    <a href="{{ song.link }}">Lire avec Spotify</a>
+{% endblock %}
