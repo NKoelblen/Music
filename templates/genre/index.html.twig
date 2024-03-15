@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All genres{% endblock %}
+
+{% block body %}
+<h1>All genres</h1>
+<ul class="table">
+    {% for genre in genres %}
+        <li>
+            <a href="{{ path('genre.show', {id: genre.id, slug: genre.slug})}}">{{ genre.title }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

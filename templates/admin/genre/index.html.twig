@@ -1,0 +1,36 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}All genres{% endblock %}
+
+{% block body %}
+<h1>All genres</h1>
+<p>
+    <a class="btn btn-primary" href="{{ path('admin.genre.create')}}">Create a new genre</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for genre in genres %}
+            <tr>
+                <td>
+                    <a href="{{ path('genre.show', {id: genre.id, slug: genre.slug})}}">{{ genre.title }}</a>
+                </td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <a class="btn btn-primary" href="{{ path('admin.genre.edit', {id: genre.id})}}">Edit</a>
+                        <form action="{{ path('admin.genre.delete', {id: genre.id})}}" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
