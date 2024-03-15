@@ -4,4 +4,11 @@
 
 {% block body %}
     <h1>{{ genre.title }}</h1>
+    <ul>
+        {% for song in genre.songs %}
+        <li>
+            <a href="{{ path('song.show', {id: song.id, slug: song.slug})}}">{{ song.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

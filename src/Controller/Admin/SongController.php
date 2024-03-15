@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Song;
 use App\Form\SongType;
+use App\Repository\GenreRepository;
 use App\Repository\SongRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,9 +17,12 @@ use Symfony\Component\Routing\Requirement\Requirement;
 class SongController extends AbstractController
 {
     #[Route(name: 'index')]
-    public function index(Request $request, SongRepository $repository): Response
-    {
-        $songs = $repository->findAll();
+    public function index(
+        Request $request,
+        SongRepository $repository,
+        GenreRepository $genreRepository
+    ): Response {
+        $songs = $repository->findAllSongs();
         return $this->render(
             'admin/song/index.html.twig',
             [

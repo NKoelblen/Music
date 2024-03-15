@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\GenreRepository;
 use App\Repository\SongRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,16 +26,13 @@ class SongController extends AbstractController
     }
 
     #[Route('/{slug}-{id}', name: 'show', requirements: ['id' => Requirement::POSITIVE_INT, 'slug' => Requirement::ASCII_SLUG])]
-    public function show(Request $request, string $slug, int $id, SongRepository $repository): Response
+    public function show(Request $request, string $slug, int $id, SongRepository $repository, GenreRepository $genreRepository): Response
     {
-        $song = $repository->find($id);
-        if ($song->getSlug() !== $slug) {
-            return $this->redirectToRoute('song.show', ['slug' => $song->getSlug(), 'id' => $song->getId()]);
-        }
+        $song = $repository->findSong($id);
         return $this->render(
             'song/show.html.twig',
             [
-                'song' => $song,
+                'song' => $song[0],
             ]
         );
     }

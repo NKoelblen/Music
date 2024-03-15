@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Genre;
 use App\Entity\Song;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PostSubmitEvent;
@@ -24,6 +26,10 @@ class SongType extends AbstractType
         $builder
             ->add('title')
             ->add('slug', TextType::class, ['required' => false])
+            ->add('genre', EntityType::class, [
+                'class' => Genre::class,
+                'choice_label' => 'title'
+            ])
             ->add('link')
             ->add('save', SubmitType::class)
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->autoslug('title'))

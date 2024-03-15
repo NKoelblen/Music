@@ -25,6 +25,9 @@ class Song
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'songs')]
+    private ?Genre $Genre = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class Song
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getGenre(): ?Genre
+    {
+        return $this->Genre;
+    }
+
+    public function setGenre(?Genre $Genre): static
+    {
+        $this->Genre = $Genre;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\GenreRepository;
+use App\Repository\SongRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +26,7 @@ class GenreController extends AbstractController
     }
 
     #[Route('/{slug}-{id}', name: 'show', requirements: ['id' => Requirement::POSITIVE_INT, 'slug' => Requirement::ASCII_SLUG])]
-    public function show(Request $request, string $slug, int $id, GenreRepository $repository): Response
+    public function show(Request $request, string $slug, int $id, GenreRepository $repository, SongRepository $songRepository): Response
     {
         $genre = $repository->find($id);
         if ($genre->getSlug() !== $slug) {

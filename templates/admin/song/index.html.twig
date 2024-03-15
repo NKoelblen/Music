@@ -11,6 +11,7 @@
     <thead>
         <tr>
             <th>Title</th>
+            <th><a href="{{ path('admin.genre.index') }}">Genres</a></th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -20,6 +21,7 @@
                 <td>
                     <a href="{{ path('song.show', {id: song.id, slug: song.slug})}}">{{ song.title }}</a>
                 </td>
+                <td><a href="{{ path('genre.show', {id: song.genre.id, slug: song.genre.slug})}}">{{ song.genre.title }}</a></td>
                 <td>
                     <div class="d-flex gap-1">
                         <a class="btn btn-primary" href="{{ path('admin.song.edit', {id: song.id})}}">Edit</a>

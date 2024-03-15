@@ -5,4 +5,5 @@
 {% block body %}
     <h1>{{ song.title }}</h1>
     <a href="{{ song.link }}">Lire avec Spotify</a>
+    <p>Genre : <a href="{{ path('genre.show', {id: song.genre.id, slug: song.genre.slug})}}">{{ song.genre.title }}</a></p>
 {% endblock %}
