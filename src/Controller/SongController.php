@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Song;
+use App\Form\SongType;
 use App\Repository\SongRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,4 +39,53 @@ class SongController extends AbstractController
             ]
         );
     }
+
+    #[Route('/song/{id}-edit', name: 'song.edit', methods: ['GET', 'POST'])]
+    public function edit(Song $song, Request $request, EntityManagerInterface $em)
+    {
+        $form = $this->createForm(SongType::class, $song);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()):
+            $em->flush();
+            $this->addFlash('success', 'The song has been successfully updated.');
+            return $this->redirectToRoute('song.index');
+        endif;
+        return $this->render(
+            'song/edit.html.twig',
+            [
+                'song' => $song,
+                'form' => $form
+            ]
+        );
+    }
+
+    #[Route('/song/create', name: 'song.create')]
+    public function create(Request $request, EntityManagerInterface $em)
+    {
+        $song = new Song();
+        $form = $this->createForm(SongType::class, $song);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()):
+            $em->persist($song);
+            $em->flush();
+            $this->addFlash('success', 'The song has been successfully created.');
+            return $this->redirectToRoute('song.index');
+        endif;
+        return $this->render(
+            'song/create.html.twig',
+            [
+                'form' => $form
+            ]
+        );
+    }
+
+    #[Route('/song/{id}*delete', name: 'song.delete', methods: ['DELETE'])]
+    public function delete(Song $song, EntityManagerInterface $em)
+    {
+        $em->remove($song);
+        $em->flush();
+        $this->addFlash('success', 'The song has been successfully deleted.');
+        return $this->redirectToRoute('song.index');
+    }
+
 }

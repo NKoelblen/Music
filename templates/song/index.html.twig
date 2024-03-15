@@ -3,12 +3,34 @@
 {% block title %}All Songs{% endblock %}
 
 {% block body %}
-<p>Blablabla</p>
-<ul>
-    {% for song in songs %}
-        <li>
-            <a href="{{ path('song.show', {id: song.id, slug: song.slug})}}">{{ song.title }}</a>
-        </li>
-    {% endfor %}
-</ul>
+<h1>All Songs</h1>
+<p>
+    <a class="btn btn-primary" href="{{ path('song.create')}}">Create a new song</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for song in songs %}
+            <tr>
+                <td>
+                    <a href="{{ path('song.show', {id: song.id, slug: song.slug})}}">{{ song.title }}</a>
+                </td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <a class="btn btn-primary" href="{{ path('song.edit', {id: song.id})}}">Edit</a>
+                        <form action="{{ path('song.delete', {id: song.id})}}" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
