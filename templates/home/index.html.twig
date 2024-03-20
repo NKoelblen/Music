@@ -1,9 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello Word!{% endblock %}
+{% block title %}Playlists{% endblock %}
 
 {% block body %}
-<div class="example-wrapper">
-    <h1>Hello Word !</h1>
-</div>
+    <h1>Playlists</h1>
+    {% if app.user %}
+        <p>
+            <a class="btn btn-primary" href="{{ path('admin.playlists.create')}}">Create a new playlist</a>
+        </p>
+    {% endif %}
+    <ul class="table">
+        {% for playlist in playlists %}
+            <li>
+                <a href="{{ path('playlists.single', {slug: playlist.slug, id: playlist.id})}}">{{ playlist.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

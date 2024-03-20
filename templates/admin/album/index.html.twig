@@ -1,0 +1,50 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Albums{% endblock %}
+
+{% block body %}
+<h1>Albums</h1>
+<p>
+    <a class="btn btn-primary" href="{{ path('admin.albums.create')}}">Add a new album</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artists</th>
+            <th>Date</th>
+            <th>Label</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for album in albums %}
+            <tr>
+                <td>
+                    <a href="{{ path('albums.single', {id: album.id, slug: album.slug})}}">{{ album.title }}</a>
+                </td>
+                                <td>
+                    <ul>
+                        {% for artist in album.artists %}
+                            <li><a href='{{ path('artists.single', {slug: artist.slug, id: artist.id})}}'>{{ artist.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ album.releaseDate }}</td>
+                <td>{{ album.label }}</td>
+                <td>{{ album.type }}</td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <a class="btn btn-primary" href="{{ path('admin.albums.update', {id: album.id})}}">Edit</a>
+                        <form action="{{ path('admin.albums.delete', {id: album.id})}}" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title album.title %}
+
+{% block body %}
+    <h1>{{ album.title }}</h1>
+    {% if app.user %}
+        <div class="d-flex gap-1">
+            <a class="btn btn-primary" href="{{ path('admin.albums.update', {id: album.id})}}">Edit</a>
+            <form action="{{ path('admin.albums.delete', {id: album.id})}}" method="POST">
+                <input type="hidden" name="_method" value="DELETE">
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    {% endif %}
+    <p>Artists:</p>
+    <ul>
+        {% for artist in album.artists %}
+            <li><a href='{{ path('artists.single', {slug: artist.slug, id: artist.id})}}'>{{ artist.name }}</a></li>
+        {% endfor %}
+    </ul>
+    <p>Date: {{ album.releaseDate }}</p>
+    <h2>Tracks:</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Artists</th>
+                <th>Duration</th>
+                <th>Genres</th>
+                <th>Mood</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for track in album.tracks %}
+                <tr>
+                    <td>
+                        <a href="{{ path('tracks.single', {slug: track.slug, id: track.id})}}">{{ track.title }}</a>
+                    </td>
+                    <td>
+                        <ul>
+                            {% for artist in track.artists %}
+                                <li><a href='{{ path('artists.single', {slug: artist.slug, id: artist.id})}}'>{{ artist.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ track.duration }}</td>
+                    <td>
+                        <ul>
+                            {% for genre in track.genres %}
+                                <li><a href='{{ path('genres.single', {slug: genre.slug, id: genre.id})}}'>{{ genre.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ track.mood }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

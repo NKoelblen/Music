@@ -15,19 +15,30 @@
     <body>
         <nav class="navbar bg-primary navbar-expand-lg" data-bs-theme="dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url('home') }}">Dashboard</a>
+                <a class="navbar-brand" href="{{ path('admin') }}">Music Dashboard</a>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link {{ app.current_route == 'admin' ? 'active' : '' }}" href="{{ path('admin') }}">Home</a>
+                        <a class="nav-link {{ app.current_route starts with 'admin.tracks.' ? 'active' : '' }}" href="{{ path('admin.tracks.index') }}">Tracks</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ app.current_route starts with 'admin.song.' ? 'active' : '' }}" href="{{ path('admin.song.index') }}">Songs</a>
+                        <a class="nav-link {{ app.current_route starts with 'admin.albums.' ? 'active' : '' }}" href="{{ path('admin.albums.index') }}">Albums</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ app.current_route starts with 'admin.genre.' ? 'active' : '' }}" href="{{ path('admin.genre.index') }}">Genres</a>
+                        <a class="nav-link {{ app.current_route starts with 'admin.artists.' ? 'active' : '' }}" href="{{ path('admin.artists.index') }}">Artists</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.current_route starts with 'admin.genres.' ? 'active' : '' }}" href="{{ path('admin.genres.index') }}">Genres</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.current_route starts with 'admin.playlists.' ? 'active' : '' }}" href="{{ path('admin.playlists.index') }}">Playlists</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('home') }}">Website</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
                     </li>
                 </ul>
             </div>

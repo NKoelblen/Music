@@ -1,14 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}All genres{% endblock %}
+{% block title %}Super genres{% endblock %}
 
 {% block body %}
-<h1>All genres</h1>
-<ul class="table">
-    {% for genre in genres %}
-        <li>
-            <a href="{{ path('genre.show', {id: genre.id, slug: genre.slug})}}">{{ genre.title }}</a>
-        </li>
-    {% endfor %}
-</ul>
+    <h1>Super genres</h1>
+    {% if app.user %}
+        <p>
+            <a class="btn btn-primary" href="{{ path('admin.genres.create')}}">Create a new genre</a>
+        </p>
+    {% endif %}
+    <h2>Families</h2>
+    <ul>
+        {% for genre in genres %}
+            <li>
+                <a href="{{ path('genres.single', {slug: genre.slug, id: genre.id})}}">{{ genre.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <h2>Groups</h2>
+    <ul>
+        {% for group in groups %}
+            <li>
+                <a href="{{ path('genres.single', {slug: group.slug, id: group.id})}}">{{ group.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

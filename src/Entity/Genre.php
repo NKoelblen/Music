@@ -5,7 +5,9 @@ namespace App\Entity;
 use App\Repository\GenreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: GenreRepository::class)]
 class Genre
@@ -13,20 +15,49 @@ class Genre
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['tracks.index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['tracks.index'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['tracks.index'])]
     private ?string $slug = null;
 
-    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Genre')]
-    private Collection $songs;
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'children')]
+    private Collection $parent;
+
+    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'parent')]
+    private Collection $children;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $year = null;
+
+    #[ORM\Column(length: 7, nullable: true)]
+    private ?string $color = null;
+
+    #[ORM\ManyToMany(targetEntity: Track::class, mappedBy: 'genres')]
+    private Collection $tracks;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $transverse = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $order_number = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $liked = null;
 
     public function __construct()
     {
-        $this->songs = new ArrayCollection();
+        $this->parent = new ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->tracks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -59,31 +90,151 @@ class Genre
     }
 
     /**
-     * @return Collection<int, Song>
+     * @return Collection<int, self>
      */
-    public function getSongs(): Collection
+    public function getParent(): Collection
     {
-        return $this->songs;
+        return $this->parent;
     }
 
-    public function addSong(Song $song): static
+    public function addParent(self $parent): static
     {
-        if (!$this->songs->contains($song)) {
-            $this->songs->add($song);
-            $song->setGenre($this);
+        if (!$this->parent->contains($parent)) {
+            $this->parent->add($parent);
         }
 
         return $this;
     }
 
-    public function removeSong(Song $song): static
+    public function removeParent(self $parent): static
     {
-        if ($this->songs->removeElement($song)) {
-            // set the owning side to null (unless already changed)
-            if ($song->getGenre() === $this) {
-                $song->setGenre(null);
-            }
+        $this->parent->removeElement($parent);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getChildren(): Collection
+    {
+        return $this->children;
+    }
+
+    public function addChild(self $child): static
+    {
+        if (!$this->children->contains($child)) {
+            $this->children->add($child);
+            $child->addParent($this);
         }
+
+        return $this;
+    }
+
+    public function removeChild(self $child): static
+    {
+        if ($this->children->removeElement($child)) {
+            $child->removeParent($this);
+        }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getYear(): ?int
+    {
+        return $this->year;
+    }
+
+    public function setYear(?int $year): static
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): static
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Track>
+     */
+    public function getTracks(): Collection
+    {
+        return $this->tracks;
+    }
+
+    public function addTrack(Track $track): static
+    {
+        if (!$this->tracks->contains($track)) {
+            $this->tracks->add($track);
+            $track->addGenre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrack(Track $track): static
+    {
+        if ($this->tracks->removeElement($track)) {
+            $track->removeGenre($this);
+        }
+
+        return $this;
+    }
+
+    public function isTransverse(): ?bool
+    {
+        return $this->transverse;
+    }
+
+    public function setTransverse(?bool $transverse): static
+    {
+        $this->transverse = $transverse;
+
+        return $this;
+    }
+
+    public function getOrderNumber(): ?int
+    {
+        return $this->order_number;
+    }
+
+    public function setOrderNumber(?int $order_number): static
+    {
+        $this->order_number = $order_number;
+
+        return $this;
+    }
+
+    public function isLiked(): ?bool
+    {
+        return $this->liked;
+    }
+
+    public function setLiked(?bool $liked): static
+    {
+        $this->liked = $liked;
 
         return $this;
     }

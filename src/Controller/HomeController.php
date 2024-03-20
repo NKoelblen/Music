@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\PlaylistRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,7 @@ class HomeController extends AbstractController
     #[Route("/", "home")]
     function index(
         Request $request,
+        PlaylistRepository $repository,
         EntityManagerInterface $em,
         UserPasswordHasherInterface $hasher
     ): Response {
@@ -24,6 +26,12 @@ class HomeController extends AbstractController
         //     ->setRoles([]);
         // $em->persist($user);
         // $em->flush();
-        return $this->render('home/index.html.twig');
+        $playlists = $repository->findAll();
+        return $this->render(
+            'home/index.html.twig',
+            [
+                'playlists' => $playlists
+            ]
+        );
     }
 }

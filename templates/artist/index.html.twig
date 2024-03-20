@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Artists{% endblock %}
+
+{% block body %}
+<h1>Artists</h1>
+{% if app.user %}
+    <p>
+        <a class="btn btn-primary" href="{{ path('admin.artists.create')}}">Add a new artist</a>
+    </p>
+{% endif %}
+<ul class="table">
+    {% for artist in artists %}
+        <li>
+            <a href="{{ path('artists.single', {slug: artist.slug, id: artist.id})}}">{{ artist.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

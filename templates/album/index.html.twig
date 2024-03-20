@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Albums{% endblock %}
+
+{% block body %}
+    <h1>Albums</h1>
+    {% if app.user %}
+        <p>
+            <a class="btn btn-primary" href="{{ path('admin.albums.create')}}">Add a new album</a>
+        </p>
+    {% endif %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Artists</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for album in albums %}
+                <tr>
+                    <td>
+                        <a href="{{ path('albums.single', {slug: album.slug, id: album.id})}}">{{ album.title }}</a>
+                    </td>
+                    <td>
+                        <ul>
+                            {% for artist in album.artists %}
+                                <li><a href='{{ path('artists.single', {slug: artist.slug, id: artist.id})}}'>{{ artist.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ album.releaseDate }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

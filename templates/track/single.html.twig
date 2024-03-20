@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title track.title %}
+
+{% block body %}
+    <h1>{{ track.title }}</h1>
+    {% if app.user %}
+        <div class="d-flex gap-1">
+            <a class="btn btn-primary" href="{{ path('admin.tracks.update', {id: track.id})}}">Edit</a>
+            <form action="{{ path('admin.tracks.delete', {id: track.id})}}" method="POST">
+                <input type="hidden" name="_method" value="DELETE">
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    {% endif %}
+    <p>Artists:</p>
+    <ul>
+        {% for artist in track.artists %}
+            <li><a href='{{ path('artists.single', {slug: artist.slug, id: artist.id})}}'>{{ artist.name }}</a></li>
+        {% endfor %}
+    </ul>
+    <p>Album: <a href='{{ path('albums.single', {slug: track.album.slug, id: track.album.id})}}'>{{ track.album.title }}</a></p>
+    <p>Duration (in ms): {{ track.duration }}</p>
+    <p>Genres:</p>
+    <ul>
+        {% for genre in track.genres %}
+            <li><a href='{{ path('genres.single', {slug: genre.slug, id: genre.id})}}'>{{ genre.title }}</a></li>
+        {% endfor %}
+    </ul>
+    <p>Mood: {{ track.mood }}</p>
+    <p>Accousticness: {{ track.accousticness }}</p>
+    <p>Danceability: {{ track.danceability }}</p>
+    <p>Energy: {{ track.energy }}</p>
+    <p>Instrumentalness: {{ track.instrumentalness }}</p>
+    <p>Liveness: {{ track.liveness }}</p>
+    <p>Loudness: {{ track.loudness }}</p>
+    <p>Speechiness: {{ track.speechiness }}</p>
+    <p>Valence: {{ track.valence }}</p>
+    {# <p>Key: {{ track.musicKey }}</p> #}
+    <p>Modality: {{ track.modality }}</p>
+    <p>Tempo: {{ track.tempo }}</p>
+    {# <p>Time Signature:{{ track.timeSignature }}</p> #}
+{% endblock %}

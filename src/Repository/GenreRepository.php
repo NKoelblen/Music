@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\DTO\Genre\TinyGenreDTO;
 use App\Entity\Genre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,6 +21,82 @@ class GenreRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Genre::class);
     }
+
+    /**
+     * @return TinyGenreDTO[]
+     */
+    public function findPrimaryGenres(): array
+    {
+        return $this->createQueryBuilder('g')
+            ->select('NEW App\\DTO\\Genre\\TinyGenreDTO(g.id, g.slug, g.title)')
+            ->leftJoin('g.parent', 'p')
+            ->where('g.parent IS EMPTY')
+            ->andWhere('g.transverse IS NULL OR g.transverse = false')
+            ->orderBy('g.order_number')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findGroups(): array
+    {
+        return $this->createQueryBuilder('g')
+            ->select('NEW App\\DTO\\Genre\\TinyGenreDTO(g.id, g.slug, g.title)')
+            ->where('g.parent IS EMPTY')
+            ->andWhere('g.transverse = true')
+            ->leftJoin('g.parent', 'p')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findGenre($id): ?TinyGenreDTO
+    {
+        return $this->createQueryBuilder('g')
+            ->select('NEW App\\DTO\\Genre\\TinyGenreDTO(g.id, g.slug, g.title)')
+            ->where('g.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findGenreParents($id): array
+    {
+        return $this->createQueryBuilder('g')
+            ->select('NEW App\\DTO\\Genre\\TinyGenreDTO(p.id, p.slug, p.title)')
+            ->where('g.id = :id')
+            ->setParameter('id', $id)
+            ->leftJoin('g.parent', 'p')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findGenreSiblings($id): array
+    {
+        return $this->createQueryBuilder('g')
+            ->select('NEW App\\DTO\\Genre\\TinyGenreWithParentDTO(p.title, s.id, s.slug, s.title)')
+            ->where('g.id = :id')
+            ->setParameter('id', $id)
+            ->leftJoin('g.parent', 'p')
+            ->leftJoin('p.children', 's')
+            ->andWhere('s.id != :id')
+            // ->groupBy('g.parent')
+            ->orderBy('p.order_number')
+            ->addOrderBy('s.order_number')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findGenreChildren($id): array
+    {
+        return $this->createQueryBuilder('g')
+            ->select('NEW App\\DTO\\Genre\\TinyGenreDTO(c.id, c.slug, c.title)')
+            ->where('g.id = :id')
+            ->setParameter('id', $id)
+            ->leftJoin('g.children', 'c')
+            ->orderBy('c.order_number')
+            ->getQuery()
+            ->getResult();
+    }
+
 
     //    /**
     //     * @return Genre[] Returns an array of Genre objects

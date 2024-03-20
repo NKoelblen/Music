@@ -13,14 +13,14 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('admin/genre', name: 'admin.genre.')]
+#[Route('admin/genres', name: 'admin.genres.')]
 #[IsGranted('ROLE_USER')]
 class GenreController extends AbstractController
 {
     #[Route(name: 'index')]
     public function index(Request $request, GenreRepository $repository): Response
     {
-        $genres = $repository->findAll();
+        $genres = $repository->findBy([], ['title' => 'ASC']);
         return $this->render(
             'admin/genre/index.html.twig',
             [
@@ -39,7 +39,7 @@ class GenreController extends AbstractController
             $em->persist($genre);
             $em->flush();
             $this->addFlash('success', 'The genre has been successfully created.');
-            return $this->redirectToRoute('admin.genre.index');
+            return $this->redirectToRoute('admin.genres.index');
         endif;
         return $this->render(
             'admin/genre/create.html.twig',
@@ -49,18 +49,18 @@ class GenreController extends AbstractController
         );
     }
 
-    #[Route('/{id}', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
-    public function edit(Genre $genre, Request $request, EntityManagerInterface $em)
+    #[Route('/{id}', name: 'update', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    public function update(Genre $genre, Request $request, EntityManagerInterface $em)
     {
         $form = $this->createForm(GenreType::class, $genre);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()):
             $em->flush();
             $this->addFlash('success', 'The genre has been successfully updated.');
-            return $this->redirectToRoute('admin.genre.index');
+            return $this->redirectToRoute('admin.genres.index');
         endif;
         return $this->render(
-            'admin/genre/edit.html.twig',
+            'admin/genre/update.html.twig',
             [
                 'genre' => $genre,
                 'form' => $form
@@ -74,7 +74,7 @@ class GenreController extends AbstractController
         $em->remove($genre);
         $em->flush();
         $this->addFlash('success', 'The genre has been successfully deleted.');
-        return $this->redirectToRoute('admin.genre.index');
+        return $this->redirectToRoute('admin.genres.index');
     }
 
 }

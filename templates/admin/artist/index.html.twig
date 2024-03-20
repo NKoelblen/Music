@@ -1,0 +1,36 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Artists{% endblock %}
+
+{% block body %}
+<h1>Artists</h1>
+<p>
+    <a class="btn btn-primary" href="{{ path('admin.artists.create')}}">Add a new artist</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for artist in artists %}
+            <tr>
+                <td>
+                    <a href="{{ path('artists.single', {id: artist.id, slug: artist.slug})}}">{{ artist.name }}</a>
+                </td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <a class="btn btn-primary" href="{{ path('admin.artists.update', {id: artist.id})}}">Edit</a>
+                        <form action="{{ path('admin.artists.delete', {id: artist.id})}}" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

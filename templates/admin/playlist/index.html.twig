@@ -1,0 +1,36 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}All playlists{% endblock %}
+
+{% block body %}
+<h1>All playlists</h1>
+<p>
+    <a class="btn btn-primary" href="{{ path('admin.playlists.create')}}">Create a new playlist</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for playlist in playlists %}
+            <tr>
+                <td>
+                    <a href="{{ path('playlists.single', {id: playlist.id, slug: playlist.slug})}}">{{ playlist.title }}</a>
+                </td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <a class="btn btn-primary" href="{{ path('admin.playlists.update', {id: playlist.id})}}">Edit</a>
+                        <form action="{{ path('admin.playlists.delete', {id: playlist.id})}}" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

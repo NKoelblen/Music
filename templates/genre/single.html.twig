@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title "Genre: " ~ genre.title %}
+
+{% block body %}
+    <h1>{{ genre.title }}</h1>
+    {% if app.user %}
+        <div class="d-flex gap-1">
+            <a class="btn btn-primary" href="{{ path('admin.genres.update', {id: genre.id})}}">Edit</a>
+            <form action="{{ path('admin.genres.delete', {id: genre.id})}}" method="POST">
+                <input type="hidden" name="_method" value="DELETE">
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    {% endif %}
+    <p>{{ genre.year }}</p>
+    <p>{{ genre.description }}</p>
+    <h2>Tracks:</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Artists</th>
+                <th>Album</th>
+                <th>Duration</th>
+                <th>Genres</th>
+                <th>Mood</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for track in genre.tracks %}
+                <tr>
+                    <td>
+                        <a href="{{ path('tracks.single', {slug: track.slug, id: track.id})}}">{{ track.title }}</a>
+                    </td>
+                    <td>
+                        <ul>
+                            {% for artist in track.artists %}
+                                <li><a href='{{ path('artists.single', {slug: artist.slug, id: artist.id})}}'>{{ artist.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        <a href='{{ path('albums.single', {slug: track.album.slug, id: track.album.id})}}'>{{ track.album.title }}</a>
+                    </td>
+                    <td>{{ track.duration }}</td>
+                    <td>
+                        <ul>
+                            {% for genre in track.genres %}
+                                <li><a href='{{ path('genres.single', {slug: genre.slug, id: genre.id})}}'>{{ genre.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ track.mood }}</td>
+                </tr>
+            {% endfor %}
+            {% for child in genre.children %}
+                {% for track in child.tracks %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('tracks.single', {slug: track.slug, id: track.id})}}">{{ track.title }}</a>
+                        </td>
+                        <td>
+                            <ul>
+                                {% for artist in track.artists %}
+                                    <li><a href='{{ path('artists.single', {slug: artist.slug, id: artist.id})}}'>{{ artist.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            <a href='{{ path('albums.single', {slug: track.album.slug, id: track.album.id})}}'>{{ track.album.title }}</a>
+                        </td>
+                        <td>{{ track.duration }}</td>
+                        <td>
+                            <ul>
+                                {% for genre in track.genres %}
+                                    <li><a href='{{ path('genres.single', {slug: genre.slug, id: genre.id})}}'>{{ genre.title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{{ track.mood }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if parents.0.id %}
+        <h2>Parents:</h2>
+        <ul>
+            {% for parent in parents %}
+                <li>
+                    <a href="{{ path('genres.single', {id: parent.id, slug: parent.slug})}}">{{ parent.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if children.0.id %}
+        <h2>Children:</h2>
+        <ul>
+            {% for child in children %}
+                <li>
+                    <a href="{{ path('genres.single', {id: child.id, slug: child.slug})}}">{{ child.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if siblings is not empty %}
+        <h2>Siblings:</h2>
+        <ul>
+            {% for sibling in siblings %}
+                <li>
+                    <a href="{{ path('genres.single', {id: sibling.id, slug: sibling.slug})}}">{{ sibling.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+{% endblock %}
