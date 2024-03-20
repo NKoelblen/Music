@@ -25,63 +25,63 @@ class Track
     #[Groups(['tracks.index'])]
     private ?string $slug = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['tracks.index'])]
     private ?int $duration = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $track_number = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['tracks.single'])]
     private ?float $accousticness = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['tracks.single'])]
     private ?float $danceability = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['tracks.single'])]
     private ?float $energy = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['tracks.single'])]
     private ?float $instrumentalness = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['tracks.single'])]
     private ?int $music_key = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['tracks.single'])]
     private ?float $liveness = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['tracks.single'])]
     private ?float $loudness = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['tracks.single'])]
     private ?int $modality = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['tracks.single'])]
     private ?float $speechiness = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['tracks.single'])]
     private ?float $tempo = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['tracks.single'])]
     private ?int $time_signature = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['tracks.single'])]
     private ?float $valence = null;
 
     #[ORM\ManyToOne(inversedBy: 'tracks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     #[Groups(['tracks.index'])]
     private ?Album $album = null;
 
@@ -93,7 +93,7 @@ class Track
     #[Groups(['tracks.index'])]
     private Collection $genres;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $disc_number = null;
 
     #[ORM\Column(length: 255, nullable: true)]

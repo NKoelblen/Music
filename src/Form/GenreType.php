@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Genre;
+use App\Form\AutocompleteField\GenreAutocompleteField;
 use App\Form\Type\WhiteColorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -25,16 +26,13 @@ class GenreType extends AbstractType
         $builder
             ->add('title')
             ->add('slug', TextType::class, ['required' => false])
-            ->add('color', ColorType::class, [
-                'attr' => ['value' => '#FFFFFF']
-            ])
+            ->add('color', ColorType::class, ['attr' => ['value' => '#FFFFFF']])
             ->add('transverse', CheckboxType::class, ['required' => false])
             ->add('order_number')
-            ->add('parent', EntityType::class, [
-                'class' => Genre::class,
-                'choice_label' => 'title',
-                'multiple' => true,
-                'required' => false
+            ->add('parent', GenreAutocompleteField::class, [
+                'multiple' => 'true',
+                'required' => false,
+                'empty_data' => []
             ])
             ->add('year')
             ->add('description')

@@ -15,17 +15,25 @@
     {% endif %}
     <p>Artists:</p>
     <ul>
-        {% for artist in track.artists %}
-            <li><a href='{{ path('artists.single', {slug: artist.slug, id: artist.id})}}'>{{ artist.name }}</a></li>
-        {% endfor %}
+        {% if track.artists is not empty %}
+            {% for artist in track.artists %}
+                <li><a href='{{ path('artists.single', {slug: artist.slug, id: artist.id})}}'>{{ artist.name }}</a></li>
+            {% endfor %}
+        {% endif %}
     </ul>
-    <p>Album: <a href='{{ path('albums.single', {slug: track.album.slug, id: track.album.id})}}'>{{ track.album.title }}</a></p>
+    <p>Album: 
+        {% if track.album %}
+            <a href='{{ path('albums.single', {slug: track.album.slug, id: track.album.id})}}'>{{ track.album.title }}</a>
+        {% endif %}
+    </p>
     <p>Duration (in ms): {{ track.duration }}</p>
     <p>Genres:</p>
     <ul>
-        {% for genre in track.genres %}
-            <li><a href='{{ path('genres.single', {slug: genre.slug, id: genre.id})}}'>{{ genre.title }}</a></li>
-        {% endfor %}
+        {% if track.genres is not empty %}
+            {% for genre in track.genres %}
+                <li><a href='{{ path('genres.single', {slug: genre.slug, id: genre.id})}}'>{{ genre.title }}</a></li>
+            {% endfor %}
+        {% endif %}
     </ul>
     <p>Mood: {{ track.mood }}</p>
     <p>Accousticness: {{ track.accousticness }}</p>

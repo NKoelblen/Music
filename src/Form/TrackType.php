@@ -7,6 +7,10 @@ use App\Entity\Artist;
 use App\Entity\Genre;
 use App\Entity\Playlist;
 use App\Entity\Track;
+use App\Form\AutocompleteField\AlbumAutocompleteField;
+use App\Form\AutocompleteField\ArtistAutocompleteField;
+use App\Form\AutocompleteField\GenreAutocompleteField;
+use App\Form\AutocompleteField\PlaylistAutocompleteField;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PreSubmitEvent;
@@ -163,99 +167,47 @@ class TrackType extends AbstractType
             ->add('title')
             ->add('slug', TextType::class, ['required' => false])
             ->add('duration', IntegerType::class, [
-                'required' => false,
-                'empty_data' => '0',
                 'constraints' => [new Positive()],
-                'attr' => ['min' => 0]
+                'attr' => ['min' => 1],
+                'empty_data' => 1
             ])
-            ->add('artists', EntityType::class, [
-                'class' => Artist::class,
-                'choice_label' => 'name',
-                'multiple' => true,
+            ->add('artists', ArtistAutocompleteField::class, [
+                'multiple' => 'true',
                 'required' => false,
                 'empty_data' => []
             ])
-            ->add('album', EntityType::class, [
-                'class' => Album::class,
-                'choice_label' => 'title',
-                'required' => false,
-                'empty_data' => ''
-            ])
+            ->add('album', AlbumAutocompleteField::class)
             ->add('disc_number', IntegerType::class, [
-                'required' => false,
-                'empty_data' => '1',
                 'constraints' => [new Positive()],
-                'attr' => ['min' => 1]
-
+                'attr' => ['min' => 1],
+                'empty_data' => 1
             ])
             ->add('track_number', IntegerType::class, [
-                'required' => false,
-                'empty_data' => '1',
                 'constraints' => [new Positive()],
-                'attr' => ['min' => 1]
-
+                'attr' => ['min' => 1],
+                'empty_data' => 1
             ])
-            ->add('genres', EntityType::class, [
-                'class' => Genre::class,
-                'choice_label' => 'title',
-                'multiple' => true,
+            ->add('genres', GenreAutocompleteField::class, [
+                'multiple' => 'true',
                 'required' => false,
                 'empty_data' => []
             ])
             ->add('spotify_id')
-            ->add('valence', NumberType::class, [
-                'required' => false,
-                'empty_data' => '-1'
-            ])
-            ->add('energy', NumberType::class, [
-                'required' => false,
-                'empty_data' => '-1'
-            ])
-            ->add('loudness', NumberType::class, [
-                'required' => false,
-                'empty_data' => '-1'
-            ])
-            ->add('danceability', NumberType::class, [
-                'required' => false,
-                'empty_data' => '-1'
-            ])
-            ->add('speechiness', NumberType::class, [
-                'required' => false,
-                'empty_data' => '-1'
-            ])
-            ->add('instrumentalness', NumberType::class, [
-                'required' => false,
-                'empty_data' => '-1'
-            ])
-            ->add('accousticness', NumberType::class, [
-                'required' => false,
-                'empty_data' => '-1'
-            ])
-            ->add('liveness', NumberType::class, [
-                'required' => false,
-                'empty_data' => '-1'
-            ])
-            ->add('music_key', IntegerType::class, [
-                'required' => false,
-                'empty_data' => '-1'
-            ])
-            ->add('modality', IntegerType::class, [
-                'required' => false,
-                'empty_data' => '-1'
-            ])
-            ->add('tempo', NumberType::class, [
-                'required' => false,
-                'empty_data' => '-1'
-            ])
-            ->add('time_signature', IntegerType::class, [
-                'required' => false,
-                'empty_data' => '-1'
-            ])
-            ->add('liked', CheckboxType::class)
-            ->add('playlist', EntityType::class, [
-                'class' => Playlist::class,
-                'choice_label' => 'title',
-                'multiple' => true,
+            ->add('valence')
+            ->add('energy')
+            ->add('loudness')
+            ->add('danceability')
+            ->add('speechiness')
+            ->add('instrumentalness')
+            ->add('accousticness')
+            ->add('liveness')
+            ->add('music_key')
+            ->add('modality')
+            ->add('tempo')
+            ->add('time_signature')
+            ->add('liked', CheckboxType::class, ['required' => false])
+            ->add('playlist', PlaylistAutocompleteField::class, [
+                'multiple' => 'true',
                 'required' => false,
                 'empty_data' => []
             ])
@@ -269,6 +221,7 @@ class TrackType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Track::class,
+            'allow_extra_fields' => true
         ]);
     }
 }

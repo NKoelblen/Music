@@ -26,19 +26,19 @@ class Album
     #[Groups(['tracks.index'])]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $type = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $release_date = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $relase_date_precision = null;
 
     #[ORM\Column(type: Types::ARRAY , nullable: true)]
     private ?array $genres = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $label = null;
 
     #[ORM\OneToMany(targetEntity: Track::class, mappedBy: 'album')]

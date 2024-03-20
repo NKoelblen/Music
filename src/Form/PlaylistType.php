@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Playlist;
 use App\Entity\Track;
+use App\Form\AutocompleteField\TrackAutocompleteField;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -22,13 +23,10 @@ class PlaylistType extends AbstractType
         $builder
             ->add('title')
             ->add('slug', \Symfony\Component\Form\Extension\Core\Type\TextType::class, ['required' => false])
-            ->add('tracks', EntityType::class, [
-                'class' => Track::class,
-                'choice_label' => 'title',
-                'multiple' => true,
+            ->add('tracks', TrackAutocompleteField::class, [
+                'multiple' => 'true',
                 'required' => false,
-                'empty_data' => [],
-                'by_reference' => false
+                'empty_data' => []
             ])
             ->add('save', SubmitType::class)
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->autoslug('title'))
