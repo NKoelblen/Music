@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+    httpd24:
+        container_name: music_httpd24
+        build:
+            context: ./server
+        ports:
+            - 80:80
+        volumes:
+            - ./app:/app
+            - ./server/httpd.conf:/usr/local/apache2/conf/httpd.conf
+            - ./logs:/var/log
+
+    api_httpd24:
+        container_name: music_api_httpd24
+        build:
+            context: ./server
+        ports:
+            - 81:80
+        volumes:
+            - ./api:/api
+            - ./server-api/httpd.conf:/usr/local/apache2/conf/httpd.conf
+            - ./logs:/var/log
+
+    phpfpm8:
+        container_name: music_phpfpm8
+        build:
+            context: ./php-fpm
+        ports:
+            - 9000:9000
+        volumes:
+            - ./app:/app
+            - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
+            - ./php-fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+
+    api_phpfpm8:
+        container_name: music_api_phpfpm8
+        build:
+            context: ./php-fpm
+        ports:
+            - 9001:9000
+        volumes:
+            - ./api:/api
+            - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
+            - ./php-fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+
+    mysql8:
+        container_name: music_mysql8
+        build:
+            context: ./database
+        ports:
+            - 3306:3306
+        volumes:
+            - ./database/data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: music
+
+volumes:
+    server:
+    php-fpm8:
+    database:

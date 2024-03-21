@@ -1,0 +1,47 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}All genres{% endblock %}
+
+{% block body %}
+<h1>All genres</h1>
+<p>
+    <a class="btn btn-primary" href="{{ path('admin.genres.create')}}">Create a new genre</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Hierarchy</th>
+            <th>Title</th>
+            <th>Year</th>
+            <th>Transverse</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for genre in genres %}
+            <tr>
+                <td>{{ genre.hierarchy }}</td>
+                {% if genre.color != '#ffffff' %}
+                    <td style="background-color: {{ genre.color }}">
+                        <a href="{{ path('genres.single', {id: genre.id, slug: genre.slug})}}" style="color: #FFFFFF">{{ genre.title }}</a>
+                {% else %}
+                    <td>
+                        <a href="{{ path('genres.single', {id: genre.id, slug: genre.slug})}}">{{ genre.title }}</a>
+                {% endif %}
+                </td>
+                <td>{{ genre.year }}</td>
+                <td><input type="checkbox" {{ genre.transverse ? 'checked' }} disabled></td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <a class="btn btn-primary" href="{{ path('admin.genres.update', {id: genre.id})}}">Edit</a>
+                        <form action="{{ path('admin.genres.delete', {id: genre.id})}}" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
